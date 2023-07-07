@@ -17,6 +17,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus.SlashCommands;
+using DSharpPlus.CommandsNext.Exceptions;
+using DSharpPlus.CommandsNext.Attributes;
 
 namespace SlvyDiscordBot
 {
@@ -70,6 +72,9 @@ namespace SlvyDiscordBot
             Commands.RegisterCommands<Basics>();
 
             slashCommandsConfig.RegisterCommands<Funslc>();
+
+            Commands.CommandErrored += OnCommandError;
+            Client.Ready += OnReady;
             // Config of Lavalink
             var endpoint = new ConnectionEndpoint
             {
@@ -95,9 +100,38 @@ namespace SlvyDiscordBot
             await lavalink.ConnectAsync(lavalinkConfig);
             await Task.Delay(-1);
         }
-        private async Task OnReady(ReadyEventArgs e)
+
+        private async Task OnReady(DiscordClient sender, ReadyEventArgs args)
         {
             await Client.UpdateStatusAsync(new DiscordActivity(">help ", ActivityType.Playing), UserStatus.DoNotDisturb);
+        }
+
+        private async Task OnCommandError(CommandsNextExtension sender, CommandErrorEventArgs args)
+        {
+            if(args.Exception is ChecksFailedException)
+            {
+                var castedException = (ChecksFailedException)args.Exception;
+                string cooldownTimer = string.Empty;
+
+                foreach(var check in castedException.FailedChecks)
+                {
+                    var cooldown = (CooldownAttribute)check;
+                    TimeSpan timeleft = cooldown.GetRemainingCooldown(args.Context);
+                    cooldownTimer = timeleft.ToString(@"hh\:mm\:ss");
+                }
+                var cooldownMessage = new DiscordEmbedBuilder()
+                {
+                    Title = "Wait for the Cooldown to End",
+                    Description = "Remaining Time: " + cooldownTimer,
+                    Color = DiscordColor.Red
+                };
+                await args.Context.Channel.SendMessageAsync(embed: cooldownMessage);
+            }
+        }
+
+        private Task OnClientReady (ReadyEventArgs e)
+        {
+            return Task.CompletedTask;
         }
         
     }

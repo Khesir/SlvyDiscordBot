@@ -16,19 +16,39 @@ namespace SlvyDiscordBot.Command
         // 
         
         [Command("help")]
-        
+        //[Cooldown(5, 10, CooldownBucketType.User)]
         public async Task helpFunction(CommandContext ctx)
         {
-            var helpEmbed = new DiscordEmbedBuilder()
-            {
-                Title = "Help",
-                Description = "This is the list of commands available to SlvyBot",
-                Color = DiscordColor.Blue,
+            var helpMessage = new DiscordMessageBuilder().AddEmbed(new DiscordEmbedBuilder()
                 
-            };
-            helpEmbed.AddField("Field Title", "Just Random shit").WithAuthor(ctx.Client.CurrentUser.Username).WithImageUrl("https://images.search.yahoo.com/search/images;_ylt=AwrOsjYStKNk9IIo0x.JzbkF;_ylu=c2VjA3NlYXJjaARzbGsDYnV0dG9u;_ylc=X1MDOTYwNjI4NTcEX3IDMgRmcgNtY2FmZWUEZnIyA3A6cyx2OmksbTpzYi10b3AEZ3ByaWQDBG5fcnNsdAMwBG5fc3VnZwMwBG9yaWdpbgNpbWFnZXMuc2VhcmNoLnlhaG9vLmNvbQRwb3MDMARwcXN0cgMEcHFzdHJsAzAEcXN0cmwDOQRxdWVyeQNmYXRlJTIwZmFjZQR0X3N0bXADMTY4ODQ1MDA3OA--?p=fate+face&fr=mcafee&fr2=p%3As%2Cv%3Ai%2Cm%3Asb-top&ei=UTF-8&x=wrt&type=E210US91215G0#id=5&iurl=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F45%2F88%2Fb2%2F4588b2cbf6e03d133ddbc540661c1203.jpg&action=click");
+                .WithTitle("Slvy's Command List")
+                
+                .WithColor(DiscordColor.White)
+                .WithDescription("Slash Commands are applicable to all commands. To find specific command guide write `>help <command>`" +
+                ", this applies to `/help` command. To find more info about the commands [click here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)." +
+                "\n\n`*still in development most of the command does not work.*`")
+                .AddField("Basic Commands","`help` `pool` `profile`", false)
+                .AddField("Fun Commands", "`drawcard` `blackjack` `animerate` `froghops`", false)
+                .AddField("Action Commands", "`hug` `kiss` `pat` `slap` `punch` `pinch` `pout` `happy` `sad` `cry`", false)
+                .AddField("Game Commands", "`still in development`", false)
+                .AddField("Image Commands", "`search` `meme` `anime` `nsfw`", false)
+                .AddField("Modeation", "`mute` `unmute` `ban` `unban`", false)
+                .AddField("Music", "`play` `pause` `stop` `current` `skip` `queue`", false)
+                .AddField("More Commands to Add", "soon to be developed: \n "
+                + "- Twitter api (notification) \n" +
+                "- Youtube Api (notification) \n" +
+                "- Facebook Api (notification) \n"+
+                "- Chat gpt query \n"+
+                "- Image Search and Google Search\n"+
+                "- Rpg game system\n"+
+                "- Leveling system\n"+
+                "- interactivty Buttons\n" +
+                "- Moderation", false)
+                .WithFooter("Arigato mastah! " + DiscordEmoji.FromName(ctx.Client, ":heart:", false))
+                .WithThumbnail(ctx.Client.CurrentUser.AvatarUrl)
+                );
 
-            await ctx.Channel.SendMessageAsync(embed: helpEmbed);
+            await ctx.Channel.SendMessageAsync(helpMessage);
 
         }
 
