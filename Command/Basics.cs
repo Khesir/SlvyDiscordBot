@@ -44,12 +44,29 @@ namespace SlvyDiscordBot.Command
                 "- Leveling system\n"+
                 "- interactivty Buttons\n" +
                 "- Moderation", false)
-                .WithFooter("Arigato mastah! " + DiscordEmoji.FromName(ctx.Client, ":heart:", false))
+                .WithFooter("Greetings mastah! " + DiscordEmoji.FromName(ctx.Client, ":heart:", false))
                 .WithThumbnail(ctx.Client.CurrentUser.AvatarUrl)
                 );
 
             await ctx.Channel.SendMessageAsync(helpMessage);
 
+        }
+
+        [Command("profile")]
+        public async Task showProfile(CommandContext ctx)
+        {
+            
+            var profileEmbed = new DiscordEmbedBuilder()
+                .WithTitle("Profile")
+                .WithColor(DiscordColor.White)
+                .AddField("Name", ctx.Member.DisplayName, true)
+                .AddField("Date Joined", "" , true)
+                .AddField("Roles", "" , false)
+                .WithFooter(""+ DiscordEmoji.FromName(ctx.Client, ":heart:",false));
+
+
+            var profileMessage = new DiscordMessageBuilder().AddEmbed(profileEmbed);
+            await ctx.Channel.SendMessageAsync(profileMessage);
         }
 
 
