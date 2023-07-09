@@ -152,6 +152,7 @@
     <Compile Include="Command\Basics.cs" />
     <Compile Include="Command\FunCommands.cs" />
     <Compile Include="Command\GameCommand.cs" />
+    <Compile Include="Command\Music.cs" />
     <Compile Include="ConfigJSON.cs" />
     <Compile Include="External Classes\Cardbuilder.cs" />
     <Compile Include="Program.cs" />

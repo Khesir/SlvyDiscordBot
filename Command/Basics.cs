@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Lavalink;
 using System;
 using System.Collections.Generic;
@@ -55,232 +56,99 @@ namespace SlvyDiscordBot.Command
         [Command("profile")]
         public async Task showProfile(CommandContext ctx)
         {
-            
-            var profileEmbed = new DiscordEmbedBuilder()
+
+            var displayName = ctx.Member.DisplayName;
+            var joinDate = ctx.Member.JoinedAt.ToString("MM/dd/yyyy");
+            var roles = string.Join(" ", ctx.Member.Roles.Select(r => r.Mention));
+
+            Console.WriteLine("entered");
+            var profileEmbed = new DiscordMessageBuilder().AddEmbed(new DiscordEmbedBuilder()
                 .WithTitle("Profile")
+                .WithThumbnail(ctx.Member.AvatarUrl)
                 .WithColor(DiscordColor.White)
-                .AddField("Name", ctx.Member.DisplayName, true)
-                .AddField("Date Joined", "" , true)
-                .AddField("Roles", "" , false)
-                .WithFooter(""+ DiscordEmoji.FromName(ctx.Client, ":heart:",false));
+                .AddField("Name", displayName, true)
+                .AddField("Date Joined", joinDate, true)
+                .AddField("Roles", roles, false)
+                .WithFooter("test"+ DiscordEmoji.FromName(ctx.Client, ":heart:",false))
+                
+                );
 
-
-            var profileMessage = new DiscordMessageBuilder().AddEmbed(profileEmbed);
-            await ctx.Channel.SendMessageAsync(profileMessage);
+            await ctx.Channel.SendMessageAsync(profileEmbed);
         }
 
 
-        [Command("play")]
-        public async Task Playmusic(CommandContext ctx,[RemainingText] string query)
+        [Command("poll")]
+        public async Task PollCommand(CommandContext ctx, int TimeLimit, string Option1, string Option2, string Option3, string Option4, params string[] Question)
         {
-            // Checker for if the bot has already joined the call or not
-            // Check if the user is in the voice channel
-            var userVC = ctx.Member?.VoiceState.Channel;
-            var lavalinkInstance = ctx.Client.GetLavalink();
+            var interactvity = ctx.Client.GetInteractivity();
+            TimeSpan timer = TimeSpan.FromSeconds(TimeLimit);
+            DiscordEmoji[] optionEmojis = { DiscordEmoji.FromName(ctx.Client, ":one:", false),
+                                            DiscordEmoji.FromName(ctx.Client, ":two:", false),
+                                            DiscordEmoji.FromName(ctx.Client, ":three:", false),
+                                            DiscordEmoji.FromName(ctx.Client, ":four:", false),};
+            string optionString = optionEmojis[0] + " : " + Option1 + "\n" +
+                optionEmojis[1] + " : " + Option2 + "\n" +
+                optionEmojis[2] + " : " + Option3 + "\n" +
+                optionEmojis[3] + " : " + Option4;
+
+            var pollMessage = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Azure)
+                .WithTitle(string.Join(" ", Question))
+                .WithDescription(optionString));
 
 
-            //Pre-execution Checks
-            if(ctx.Member.VoiceState == null || userVC == null)
-            {
-                await ctx.Channel.SendMessageAsync("Please enter a vc");
-                return;
-            }
-            if(!lavalinkInstance.ConnectedNodes.Any())
-            {
-                await ctx.Channel.SendMessageAsync("Connection is not Established.");
-                return;
-            }
-            if(userVC.Type != DSharpPlus.ChannelType.Voice)
-            {
-                await ctx.Channel.SendMessageAsync("Please Enter a valid VC");
-                return;
-            }
 
-            // Connecting to the VC and playing music
-            var lavaNode = lavalinkInstance.ConnectedNodes.Values.FirstOrDefault();
-            // Makes the th
-            await lavaNode.ConnectAsync(userVC);
+            var putReactOn = await ctx.Channel.SendMessageAsync(pollMessage);
 
-            var con = lavaNode.GetGuildConnection(ctx.Member.VoiceState.Guild);
-            if(con == null)
+            foreach (var emoji in optionEmojis)
             {
-                await ctx.Channel.SendMessageAsync("Failed to connect");
-                return;
+                await putReactOn.CreateReactionAsync(emoji);
             }
 
-            //This is the load result
-            var searchQuery = await lavaNode.Rest.GetTracksAsync(query); 
-            if (searchQuery.LoadResultType == LavalinkLoadResultType.NoMatches || searchQuery.LoadResultType == LavalinkLoadResultType.LoadFailed)
+            var result = await interactvity.CollectReactionsAsync(putReactOn, timer);
+
+            int count1 = 0;
+            int count2 = 0;
+            int count3 = 0;
+            int count4 = 0;
+
+            foreach (var emoji in result)
             {
-                await ctx.Channel.SendMessageAsync($"No tracks found");
-                return;
+                if (emoji.Emoji == optionEmojis[0])
+                {
+                    count1++;
+                }
+                if (emoji.Emoji == optionEmojis[1])
+                {
+                    count2++;
+                }
+                if (emoji.Emoji == optionEmojis[2])
+                {
+                    count3++;
+                }
+                if (emoji.Emoji == optionEmojis[3])
+                {
+                    count4++;
+                }
             }
+            int totalVotes = count1 + count2 + count3 + count4;
 
-            // Playing the music
-            var musicTrack = searchQuery.Tracks.First();
-            await con.PlayAsync(musicTrack);
+            string ResultString = optionEmojis[0] + " : " + count1 + " Votes \n" +
+               optionEmojis[1] + " : " + count2 + " Votes \n" +
+               optionEmojis[2] + " : " + count3 + " Votes \n" +
+               optionEmojis[3] + " : " + count4 + " Votes \n\n" +
+               "The total number of vote is " + totalVotes;
 
-            //Embed message
-            string musicDescription = $"Now Playing: {musicTrack.Title} \n" +
-                                      $"Author: {musicTrack.Author} \n" +
-                                      $"URL: {musicTrack.Uri}";
-            var nowPlayingEmbed = new DiscordEmbedBuilder()
-            {
-                Color = DiscordColor.Purple,
-                Title = $"Successfully joined channel {userVC.Name} : and playing music",
-                Description = musicDescription
-            };
-            await ctx.Channel.SendMessageAsync(embed: nowPlayingEmbed);
-            //await Task.Delay(searchQuery.Tracks.First());
+            var resultsMessage = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Green)
+                .WithDescription(ResultString)
+                );
+            await ctx.Channel.SendMessageAsync(resultsMessage);
         }
-        [Command("pause")]
-        public async Task PauseMusic(CommandContext ctx)
-        {
-            var userVC = ctx.Member.VoiceState.Channel;
-            var lavalinkInstance = ctx.Client.GetLavalink();
 
 
-            //Pre-execution Checks
-            if (ctx.Member.VoiceState == null || userVC == null)
-            {
-                await ctx.Channel.SendMessageAsync("Please enter a vc");
-                return;
-            }
-            if (!lavalinkInstance.ConnectedNodes.Any())
-            {
-                await ctx.Channel.SendMessageAsync("Connection is not Established.");
-                return;
-            }
-            if (userVC.Type != DSharpPlus.ChannelType.Voice)
-            {
-                await ctx.Channel.SendMessageAsync("Please Enter a valid VC");
-                return;
-            }
-
-            var node = lavalinkInstance.ConnectedNodes.Values.First();
-            var con = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if( con == null )
-            {
-                await ctx.Channel.SendMessageAsync("Failed to connect");
-                return;
-            }
-
-            if(con.CurrentState.CurrentTrack == null)
-            {
-                await ctx.Channel.SendMessageAsync("No tracks are playing");
-                return;
-            }
-
-            await con.PauseAsync();
-
-            var pauseEmbed = new DiscordEmbedBuilder()
-            {
-                Color = DiscordColor.Aquamarine,
-                Title = "Track Paused"
-            };
-
-            await ctx.Channel.SendMessageAsync(embed: pauseEmbed);
-        }
-        [Command("resume")]
-        public async Task ResumeMusic(CommandContext ctx)
-        {
-            var userVC = ctx.Member.VoiceState.Channel;
-            var lavalinkInstance = ctx.Client.GetLavalink();
-
-
-            //Pre-execution Checks
-            if (ctx.Member.VoiceState == null || userVC == null)
-            {
-                await ctx.Channel.SendMessageAsync("Please enter a vc");
-                return;
-            }
-            if (!lavalinkInstance.ConnectedNodes.Any())
-            {
-                await ctx.Channel.SendMessageAsync("Connection is not Established.");
-                return;
-            }
-            if (userVC.Type != DSharpPlus.ChannelType.Voice)
-            {
-                await ctx.Channel.SendMessageAsync("Please Enter a valid VC");
-                return;
-            }
-
-            var node = lavalinkInstance.ConnectedNodes.Values.First();
-            var con = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if (con == null)
-            {
-                await ctx.Channel.SendMessageAsync("Failed to connect");
-                return;
-            }
-
-            if (con.CurrentState.CurrentTrack == null)
-            {
-                await ctx.Channel.SendMessageAsync("No tracks are playing");
-                return;
-            }
-
-            await con.ResumeAsync();
-
-            var resumeEmbed = new DiscordEmbedBuilder()
-            {
-                Color = DiscordColor.Green,
-                Title = "Track Resumed"
-            };
-
-            await ctx.Channel.SendMessageAsync(embed: resumeEmbed);
-        }
-        [Command("stop")]
-        public async Task stopMusic(CommandContext ctx)
-        {
-            var userVC = ctx.Member.VoiceState.Channel;
-            var lavalinkInstance = ctx.Client.GetLavalink();
-
-
-            //Pre-execution Checks
-            if (ctx.Member.VoiceState == null || userVC == null)
-            {
-                await ctx.Channel.SendMessageAsync("Please enter a vc");
-                return;
-            }
-            if (!lavalinkInstance.ConnectedNodes.Any())
-            {
-                await ctx.Channel.SendMessageAsync("Connection is not Established.");
-                return;
-            }
-            if (userVC.Type != DSharpPlus.ChannelType.Voice)
-            {
-                await ctx.Channel.SendMessageAsync("Please Enter a valid VC");
-                return;
-            }
-
-            var node = lavalinkInstance.ConnectedNodes.Values.First();
-            var con = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if (con == null)
-            {
-                await ctx.Channel.SendMessageAsync("Failed to connect");
-                return;
-            }
-
-            if (con.CurrentState.CurrentTrack == null)
-            {
-                await ctx.Channel.SendMessageAsync("No tracks are playing");
-                return;
-            }
-
-            await con.StopAsync();
-            await con.DisconnectAsync();
-
-            var stopEmbed = new DiscordEmbedBuilder()
-            {
-                Color = DiscordColor.Aquamarine,
-                Title = "Stopped the Track",
-                Description = "Successfully disconnected from the VC"
-            };
-
-            await ctx.Channel.SendMessageAsync(embed: stopEmbed);
-        }
+        
     }
 }
