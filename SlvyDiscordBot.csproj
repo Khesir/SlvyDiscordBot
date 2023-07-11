@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Command\ActionCommands.cs" />
     <Compile Include="Command\Basics.cs" />
     <Compile Include="Command\FunCommands.cs" />
     <Compile Include="Command\GameCommand.cs" />

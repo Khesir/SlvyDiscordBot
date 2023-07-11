@@ -71,6 +71,7 @@ namespace SlvyDiscordBot
             Commands.RegisterCommands<GameCommand>();
             Commands.RegisterCommands<Basics>();
             Commands.RegisterCommands<Music>();
+            Commands.RegisterCommands<ActionCommands>();
 
             slashCommandsConfig.RegisterCommands<Funslc>();
 
