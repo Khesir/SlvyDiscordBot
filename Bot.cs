@@ -79,14 +79,14 @@ namespace SlvyDiscordBot
             // Config of Lavalink
             var endpoint = new ConnectionEndpoint
             {
-                Hostname = "lavalink.devamop.in",
+                Hostname = "ssl.horizxon.studio",
                 Port = 443,
                 Secured = true,
             };
 
             var lavalinkConfig = new LavalinkConfiguration
             {
-                Password = "DevamOP",
+                Password = "horizxon.studio",
                 RestEndpoint = endpoint,
                 SocketEndpoint = endpoint,
             };

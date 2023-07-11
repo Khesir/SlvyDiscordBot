@@ -38,6 +38,7 @@ namespace SlvyDiscordBot.Command
             var interactvity = ctx.Client.GetInteractivity();
             DiscordEmoji[] optionEmojis = { DiscordEmoji.FromName(ctx.Client, ":arrow_down_small", false),
                                             DiscordEmoji.FromName(ctx.Client, ":arrow_up_small:", false),};
+            
             var gameMessage = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Azure)
