@@ -154,7 +154,10 @@
     <Compile Include="Command\GameCommand.cs" />
     <Compile Include="Command\Music.cs" />
     <Compile Include="ConfigJSON.cs" />
+    <Compile Include="External Classes\Card.cs" />
     <Compile Include="External Classes\Cardbuilder.cs" />
+    <Compile Include="External Classes\Deck.cs" />
+    <Compile Include="External Classes\Hand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slash Commands\Funslc.cs" />
