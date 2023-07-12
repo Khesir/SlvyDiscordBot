@@ -27,132 +27,303 @@ namespace SlvyDiscordBot.Command
         [Command("hug")]
         public async Task Hug(CommandContext ctx)
         {
-            string gifUrl = "https://tenor.com/view/hug-gif-25588769";
+            //Set the search query parameters
+            string searcQuery = "anime hug";
+            int resultLimit = 10;
 
-            string caption = "hug itself";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if(gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm hug to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No hug GIF's found at the moment");
+            }
+            
         }
         [Command("kiss")]
         public async Task Kiss(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime kiss";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm kiss to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No kiss GIF's found at the moment");
+            }
         }
         [Command("pat")]
         public async Task pat(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime pat";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm pat to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No pat GIF's found at the moment");
+            }
         }
         [Command("slap")]
         public async Task Slap(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime slap";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm slap to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No slap GIF's found at the moment");
+            }
         }
         [Command("punch")]
         public async Task Punch(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime punch";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm punch to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No punch GIF's found at the moment");
+            }
         }
         [Command("pinch")]
         public async Task Pinch(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime pinch";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm pinch to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No pinch GIF's found at the moment");
+            }
         }
         [Command("pout")]
         public async Task Pout(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime pout";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm pout to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No pout GIF's found at the moment");
+            }
         }
         [Command("happy")]
         public async Task Happy(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime happy";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm happy to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No happy GIF's found at the moment");
+            }
         }
         [Command("sad")]
         public async Task sad(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime sad";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and warm sad to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No sad GIF's found at the moment");
+            }
         }
         [Command("cry")]
         public async Task cry(CommandContext ctx)
         {
-            string gifUrl = "";
+            //Set the search query parameters
+            string searcQuery = "anime cry";
+            int resultLimit = 10;
 
-            string caption = "";
 
-            var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(gifUrl)
-                .WithDescription(caption)
-                .WithColor(DiscordColor.Blue);
-            await ctx.RespondAsync(embed: embed);
+            var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);
+            Console.WriteLine(gifData?.Results?.Count);
+
+            if (gifData?.Results?.Count > 0)
+            {
+                // Randomly select a gif from the results
+                var random = new Random();
+                var randomGif = gifData.Results[random.Next(gifData.Results.Count)];
+
+                //Create the embed with the GIF and caption
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithImageUrl(randomGif.Media.First().Gif.Url)
+                    .WithDescription("Uhh, Nice and cry hug to you!")
+                    .WithColor(DiscordColor.Blue);
+                await ctx.RespondAsync(embed: embed);
+            }
+            else
+            {
+                await ctx.RespondAsync("Sorry, No cry GIF's found at the moment");
+            }
         }
     }
 }

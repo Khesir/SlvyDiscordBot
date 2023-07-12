@@ -1,5 +1,5 @@
 ﻿{
   "Discordtoken": "token",
   "BotPrefix": ">",
-  "TenorAPiKey": "Token API"
+  "TenorApiKey": "token"
 }

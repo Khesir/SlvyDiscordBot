@@ -18,6 +18,7 @@ namespace SlvyDiscordBot.Config
         {
             this._apiKey = apiKey;
             this.httpClient = new HttpClient();
+
         }
 
         public async Task<TenorApiResponse> SearchGifs(string query, int limit)

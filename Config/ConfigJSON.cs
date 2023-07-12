@@ -13,7 +13,7 @@ namespace SlvyDiscordBot
         public string DiscordToken { get; private set; }
         [JsonProperty("BotPrefix")]
         public string BotPrefix { get; private set; }
-        [JsonProperty("TenorApi")]
+        [JsonProperty("TenorApiKey")]
         public string TenorApiToken { get; private set; }
     }
 }

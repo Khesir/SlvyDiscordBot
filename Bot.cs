@@ -66,7 +66,6 @@ namespace SlvyDiscordBot
             Commands = Client.UseCommandsNext(commandsConfig);
             var slashCommandsConfig = Client.UseSlashCommands();
 
-
             Commands.RegisterCommands<FunCommands>();
             Commands.RegisterCommands<GameCommand>();
             Commands.RegisterCommands<Basics>();
