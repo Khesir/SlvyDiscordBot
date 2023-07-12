@@ -154,7 +154,8 @@
     <Compile Include="Command\FunCommands.cs" />
     <Compile Include="Command\GameCommand.cs" />
     <Compile Include="Command\Music.cs" />
-    <Compile Include="ConfigJSON.cs" />
+    <Compile Include="Config\ConfigJSON.cs" />
+    <Compile Include="Config\TenorApi.cs" />
     <Compile Include="External Classes\Card.cs" />
     <Compile Include="External Classes\Cardbuilder.cs" />
     <Compile Include="External Classes\Deck.cs" />
@@ -165,11 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="config.json" />
+    <None Include="Config\config.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Config\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

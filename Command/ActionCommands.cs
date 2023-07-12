@@ -1,8 +1,11 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using Newtonsoft.Json;
+using SlvyDiscordBot.Config;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +14,16 @@ namespace SlvyDiscordBot.Command
 {
     public class ActionCommands : BaseCommandModule
     {
+        private readonly TenorApi tenorApi;
+
+        public ActionCommands()
+        {
+            var configJson = File.ReadAllText("config.json");
+            var config = JsonConvert.DeserializeObject<ConfigJSON>(configJson);
+
+            tenorApi = new TenorApi(config.TenorApiToken);
+        }
+
         [Command("hug")]
         public async Task Hug(CommandContext ctx)
         {

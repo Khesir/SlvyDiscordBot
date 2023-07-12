@@ -9,7 +9,7 @@ using DSharpPlus.Net;
 using Newtonsoft.Json;
 using SlvyDiscordBot.Command;
 using SlvyDiscordBot.Slash_Commands;
-//using SlvyDiscordBot.Config;
+using SlvyDiscordBot.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,7 +42,7 @@ namespace SlvyDiscordBot
             var config = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
-                Token = configJson.Token,
+                Token = configJson.DiscordToken,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
             };
@@ -56,7 +56,7 @@ namespace SlvyDiscordBot
             // Commands Configuration
             var commandsConfig = new CommandsNextConfiguration()
             {
-                StringPrefixes = new string[] { configJson.Prefix },
+                StringPrefixes = new string[] { configJson.BotPrefix },
                 EnableMentionPrefix = true,
                 EnableDms = true,
                 EnableDefaultHelp = false,
