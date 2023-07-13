@@ -153,6 +153,7 @@
     <Compile Include="Command\Basics.cs" />
     <Compile Include="Command\FunCommands.cs" />
     <Compile Include="Command\GameCommand.cs" />
+    <Compile Include="Command\ImageCommands.cs" />
     <Compile Include="Command\Music.cs" />
     <Compile Include="Config\ConfigJSON.cs" />
     <Compile Include="Config\TenorApi.cs" />

@@ -29,7 +29,7 @@ namespace SlvyDiscordBot.Command
         {
             //Set the search query parameters
             string searcQuery = "anime hug";
-            int resultLimit = 10;
+            int resultLimit = 3;
 
 
             var gifData = await tenorApi.SearchGifs(searcQuery, resultLimit);

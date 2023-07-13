@@ -71,6 +71,7 @@ namespace SlvyDiscordBot
             Commands.RegisterCommands<Basics>();
             Commands.RegisterCommands<Music>();
             Commands.RegisterCommands<ActionCommands>();
+            Commands.RegisterCommands<ImageCommands>();
 
             slashCommandsConfig.RegisterCommands<Funslc>();
 
@@ -79,14 +80,14 @@ namespace SlvyDiscordBot
             // Config of Lavalink
             var endpoint = new ConnectionEndpoint
             {
-                Hostname = "ssl.horizxon.studio",
+                Hostname = "lavalink1.snooby.ml",
                 Port = 443,
                 Secured = true,
             };
 
             var lavalinkConfig = new LavalinkConfiguration
             {
-                Password = "horizxon.studio",
+                Password = "discord.gg/6xpF6YqVDd",
                 RestEndpoint = endpoint,
                 SocketEndpoint = endpoint,
             };
