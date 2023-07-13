@@ -7,19 +7,19 @@ Webpage is still haven't been developed and page will be listing all commands an
 Considering this is as a practice bot #1
 ## Command list
 - Basic commands
- - "help, pool, profile"
+  - "help, pool, profile"
 - Fun commands
- - "drawcard, blackjack, animerate, froghops"
+  - "drawcard, blackjack, animerate, froghops"
 - Action commands
- - "hug, kiss, pat, slap, etc.."
+  - "hug, kiss, pat, slap, etc.."
 - Game Commands
- - Rpg based elements
+  - Rpg based elements
 - Image commands
- - "search, meme, anime, nsfw"
+  - "search, meme, anime, nsfw"
 - Moderation command
- - "mute, ban, unban"
+  - "mute, ban, unban"
 - Music command
- - "play, pause, stop, current, skip, queue"
+  - "play, pause, stop, current, skip, queue"
 
 ### More will be added such as:
 - Twitter Api
