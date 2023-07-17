@@ -4,7 +4,6 @@ Slvy is a multi-purpose bot that does everything from games, to moderation, to p
 
 Webpage is still haven't been developed and page will be listing all commands and documentation for the bot.
 
-Considering this is as a practice bot #1
 ## Command list
 - Basic commands
   - "help, pool, profile"
