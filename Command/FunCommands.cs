@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using DSharpPlus.EventArgs;
 using DSharpPlus;
 
+
 namespace SlvyDiscordBot.Command
 {
     public class FunCommands : BaseCommandModule
@@ -51,22 +52,29 @@ namespace SlvyDiscordBot.Command
             dealerHand.AddCard(deck.DrawCard());
             dealerHand.AddCard(deck.DrawCard());
 
-            // Display initial hands
-            var playerHandMessage = await ctx.RespondAsync($"Your Hand: {playerHand} | Total = {playerHand.GetHandValue()}");
-            var dealerHandMessage = await ctx.RespondAsync($"Dealer Hand: {dealerHand.FirstCard() }| Total = {playerHand.GetHandValue()}");
+            var gameEmbed = new DiscordEmbedBuilder()
+                .WithThumbnail(ctx.Client.CurrentUser.AvatarUrl)
+                .AddField("Player hand",$"**Your Hand:** {playerHand} \n = {playerHand.GetHandValue()}",true)
+                .AddField("Dealer hand", $"**Your Hand:** {dealerHand} \n = {dealerHand.GetHandValue()}", false);
 
+            
             //Add Reactions for player moves
-            var hitEmoji = DiscordEmoji.FromName(ctx.Client, ":punch:",false);
-            var standEmoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:", false);
+            DiscordEmoji[] optionEmoji = { DiscordEmoji.FromName(ctx.Client, ":punch:", false),
+                DiscordEmoji.FromName(ctx.Client, ":raised_hand:", false)};
 
-            await playerHandMessage.CreateReactionAsync(hitEmoji);
-            await playerHandMessage.CreateReactionAsync(standEmoji);
+            var reactionEmbed = await ctx.Channel.SendMessageAsync(embed: gameEmbed);
+
+
+            foreach (var emoji in optionEmoji)
+            {
+                await reactionEmbed.CreateReactionAsync(emoji);
+            }
             //Event handler for reaction added
             async Task OnReactionAdded(DiscordClient sender,MessageReactionAddEventArgs e)
             {
-                if (e.User.Id != ctx.User.Id || e.Message.Id != playerHandMessage.Id)
+                if (e.User.Id != ctx.User.Id || e.Message.Id != reactionEmbed.Id)
                     return;
-                if (e.Emoji == hitEmoji)
+                if (e.Emoji == optionEmoji[0])
                 {
                     //Player draws another card
                     var card = deck.DrawCard();
@@ -74,7 +82,9 @@ namespace SlvyDiscordBot.Command
                     await ctx.RespondAsync($"Player draws: {card}");
 
                     //Update player hand message
-                    await playerHandMessage.ModifyAsync($"Player Hand: {playerHand} | Total {playerHand.GetHandValue()}");
+                    var newEmbed = gameEmbed.Build();
+                    await message.modifyAsync()
+                    //await playerHandMessage.ModifyAsync($"Player Hand: {playerHand} | Total {playerHand.GetHandValue()}");
                     
                     // Check if player busts
                     if(playerHand.IsBust())
@@ -85,12 +95,12 @@ namespace SlvyDiscordBot.Command
                     }
                 
                 }
-                else if(e.Emoji== standEmoji)
+                else if(e.Emoji== optionEmoji[1])
                 {
                     //Player stands, and the dealer plays
                     await ctx.RespondAsync($"Player stands. Dealer reveals {dealerHand}");
 
-                    await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
+                    //await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
 
                     while(dealerHand.GetHandValue() < 17) 
                     {
@@ -100,7 +110,7 @@ namespace SlvyDiscordBot.Command
 
                         //Update dealer hand message after each card drawn.
 
-                        await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
+                        //await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
                     }
                     // Determine the winner
                     if(dealerHand.IsBust() || playerHand.GetHandValue() > dealerHand.GetHandValue())
@@ -120,7 +130,7 @@ namespace SlvyDiscordBot.Command
                     return;
                 }
                 // Remove the user's reaction
-                await playerHandMessage.DeleteReactionAsync(e.Emoji, e.User);
+                //await playerHandMessage.DeleteReactionAsync(e.Emoji, e.User);
             }
             // Subscribe to thhe reaction added event
             ctx.Client.MessageReactionAdded += OnReactionAdded; 

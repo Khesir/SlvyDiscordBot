@@ -29,7 +29,7 @@ namespace SlvyDiscordBot.External_Classes
 
         private List<Card> GenerateDeck()
         {
-            var suits = new string[] { "Hearts", "Diamonds", "Clubs", "Spades"};
+            var suits = new string[] { ":hearts:", ":diamonds:", ":clubs:", ":spades:"};
             var ranks = new string[]
             {
                 "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"
