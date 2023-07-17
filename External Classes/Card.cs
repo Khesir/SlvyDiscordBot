@@ -13,7 +13,7 @@ namespace SlvyDiscordBot.External_Classes
 
         public override string ToString()
         {
-            return $"{Rank} of {Suit}";
+            return $"{Rank} {Suit}";
         }
     }
 }

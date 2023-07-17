@@ -39,39 +39,41 @@ namespace SlvyDiscordBot.Command
         [Command("blackjack")]
         public async Task playBlackJack(CommandContext ctx)
         {
+            List<string> logs = new List<string>();
             var deck = new Deck();
             deck.Shuffle();
 
             var playerHand = new Hand();
             var dealerHand = new Hand();
             
+
             // Deal initial cards
             playerHand.AddCard(deck.DrawCard());
             playerHand.AddCard(deck.DrawCard());
-
+            
             dealerHand.AddCard(deck.DrawCard());
             dealerHand.AddCard(deck.DrawCard());
 
             var gameEmbed = new DiscordEmbedBuilder()
-                .WithThumbnail(ctx.Client.CurrentUser.AvatarUrl)
-                .AddField("Player hand",$"**Your Hand:** {playerHand} \n = {playerHand.GetHandValue()}",true)
-                .AddField("Dealer hand", $"**Your Hand:** {dealerHand} \n = {dealerHand.GetHandValue()}", false);
+                .WithColor(DiscordColor.White)
+                .AddField("Player hand", $"**Your Hand:** {playerHand} \n = {playerHand.GetHandValue()}", true)
+                .AddField("Dealer hand", $"**Your Hand:** {dealerHand} \n = {dealerHand.GetHandValue()}", false)
+                .AddField("Game Logs","There are no action", false);
 
-            
             //Add Reactions for player moves
             DiscordEmoji[] optionEmoji = { DiscordEmoji.FromName(ctx.Client, ":punch:", false),
                 DiscordEmoji.FromName(ctx.Client, ":raised_hand:", false)};
 
             var reactionEmbed = await ctx.Channel.SendMessageAsync(embed: gameEmbed);
-
-
             foreach (var emoji in optionEmoji)
             {
                 await reactionEmbed.CreateReactionAsync(emoji);
             }
+
             //Event handler for reaction added
             async Task OnReactionAdded(DiscordClient sender,MessageReactionAddEventArgs e)
             {
+                
                 if (e.User.Id != ctx.User.Id || e.Message.Id != reactionEmbed.Id)
                     return;
                 if (e.Emoji == optionEmoji[0])
@@ -79,17 +81,18 @@ namespace SlvyDiscordBot.Command
                     //Player draws another card
                     var card = deck.DrawCard();
                     playerHand.AddCard(card);
-                    await ctx.RespondAsync($"Player draws: {card}");
 
-                    //Update player hand message
-                    var newEmbed = gameEmbed.Build();
-                    await message.modifyAsync()
-                    //await playerHandMessage.ModifyAsync($"Player Hand: {playerHand} | Total {playerHand.GetHandValue()}");
+                    logs.Add($"Player draws: {card}");
                     
+                    await ctx.Channel.SendMessageAsync(embed: DisplayEmbed(logs, playerHand, dealerHand));
+                    
+
                     // Check if player busts
-                    if(playerHand.IsBust())
+                    if (playerHand.IsBust())
                     {
-                        await ctx.RespondAsync("Player busts! Dealer wins!");
+                        logs.Add("Player busts! Dealer wins!");
+                        
+                        await ctx.Channel.SendMessageAsync(embed: DisplayEmbed(logs, playerHand, dealerHand));
                         ctx.Client.MessageReactionAdded -= OnReactionAdded;
                         return;
                     }
@@ -98,34 +101,36 @@ namespace SlvyDiscordBot.Command
                 else if(e.Emoji== optionEmoji[1])
                 {
                     //Player stands, and the dealer plays
-                    await ctx.RespondAsync($"Player stands. Dealer reveals {dealerHand}");
+                    logs.Add($"Player stands. Dealer reveals {dealerHand}");
 
-                    //await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
 
-                    while(dealerHand.GetHandValue() < 17) 
+                    //Update player hand message
+                    await ctx.Channel.SendMessageAsync(embed: DisplayEmbed(logs, playerHand, dealerHand));
+
+                    while (dealerHand.GetHandValue() < 17) 
                     {
                         var card = deck.DrawCard();
                         dealerHand.AddCard(card);
-                        await ctx.RespondAsync($"Dealer draws: {card}");
+                        logs.Add($"Dealer draws: {card}");
 
                         //Update dealer hand message after each card drawn.
-
+                        await ctx.Channel.SendMessageAsync(embed: DisplayEmbed(logs, playerHand, dealerHand));
                         //await dealerHandMessage.ModifyAsync($"Dealer Hand: {dealerHand}");
                     }
                     // Determine the winner
                     if(dealerHand.IsBust() || playerHand.GetHandValue() > dealerHand.GetHandValue())
                     {
-                        await ctx.RespondAsync("Player wins!");
+                        logs.Add("Player wins!");
                     }
                     else if (playerHand.GetHandValue() < dealerHand.GetHandValue())
                     {
-                        await ctx.RespondAsync("Dealer wins!");
+                        logs.Add("Dealer wins!");
                     }
                     else
                     {
-                        await ctx.RespondAsync("It's a tie!");
+                        logs.Add("It's a tie!");
                     }
-
+                    await ctx.Channel.SendMessageAsync(embed: DisplayEmbed(logs, playerHand, dealerHand));
                     ctx.Client.MessageReactionAdded -= OnReactionAdded;
                     return;
                 }
@@ -134,6 +139,17 @@ namespace SlvyDiscordBot.Command
             }
             // Subscribe to thhe reaction added event
             ctx.Client.MessageReactionAdded += OnReactionAdded; 
+        }
+
+        private DiscordEmbedBuilder DisplayEmbed(List<string> logs, Hand playerHand, Hand dealerHand)
+        {
+            var modifiedEmbed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.White)
+                .AddField("Player hand", $"**Your Hand:** {playerHand} \n Total value = {playerHand.GetHandValue()}", true)
+                .AddField("Dealer hand", $"**Your Hand:** {dealerHand} \n Total value = {dealerHand.GetHandValue()}", false)
+                .AddField("Game Logs", string.Join("\n", logs), false);
+
+            return modifiedEmbed;
         }
     }
 }
