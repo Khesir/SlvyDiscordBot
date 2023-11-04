@@ -9,7 +9,6 @@ using DSharpPlus.Net;
 using Newtonsoft.Json;
 using SlvyDiscordBot.Command;
 using SlvyDiscordBot.Slash_Commands;
-using SlvyDiscordBot.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,6 +51,7 @@ namespace SlvyDiscordBot
             {
                 Timeout = TimeSpan.FromMinutes(2)
             });
+
             //Client.Ready += OnReady;
             // Commands Configuration
             var commandsConfig = new CommandsNextConfiguration()
@@ -66,12 +66,8 @@ namespace SlvyDiscordBot
             Commands = Client.UseCommandsNext(commandsConfig);
             var slashCommandsConfig = Client.UseSlashCommands();
 
-            Commands.RegisterCommands<FunCommands>();
-            Commands.RegisterCommands<GameCommand>();
             Commands.RegisterCommands<Basics>();
             Commands.RegisterCommands<Music>();
-            Commands.RegisterCommands<ActionCommands>();
-            Commands.RegisterCommands<ImageCommands>();
 
             slashCommandsConfig.RegisterCommands<Funslc>();
 
@@ -80,14 +76,14 @@ namespace SlvyDiscordBot
             // Config of Lavalink
             var endpoint = new ConnectionEndpoint
             {
-                Hostname = "lavalink1.snooby.ml",
+                Hostname = "lava2.horizxon.tech",
                 Port = 443,
                 Secured = true,
             };
 
             var lavalinkConfig = new LavalinkConfiguration
             {
-                Password = "discord.gg/6xpF6YqVDd",
+                Password = "horizxon.tech",
                 RestEndpoint = endpoint,
                 SocketEndpoint = endpoint,
             };
