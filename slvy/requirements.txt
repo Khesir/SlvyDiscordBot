@@ -1,0 +1,5 @@
+python-dotenv
+motor==3.4.0
+discord==2.3.2
+rich == 13.7.1
+PyNaCl
