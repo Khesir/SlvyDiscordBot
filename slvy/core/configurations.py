@@ -1,6 +1,13 @@
 import os
+import pathlib
+
 from dotenv import load_dotenv
 
+# TODO: Figure out how to properly set this configuration for the bot
+
+BASE_DIR = pathlib.Path(__file__).parent
+
+COGS_DIR = BASE_DIR / "cogs"
 
 basic_config = None
 

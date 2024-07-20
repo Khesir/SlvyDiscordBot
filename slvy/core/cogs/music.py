@@ -1,5 +1,6 @@
 
 import asyncio
+import logging
 
 import discord
 import youtube_dl
@@ -9,6 +10,7 @@ from discord.ext import commands
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 
+log = logging.getLogger("music")
 
 ytdl_format_options = {
     'format': 'bestaudio/best',

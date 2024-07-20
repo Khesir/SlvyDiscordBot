@@ -1,16 +1,21 @@
 
 import asyncio 
 import core.configurations as config
+import logging
 from core.bot import Slvy
+from logger import init_logging
+
+log = logging.getLogger('main')
 
 async def run_bot(slvy : Slvy) -> None:
-    
+    init_logging(0)
     token = config.basic_config['DISCORD_API_TOKEN']
 
     if token:
         await slvy.start(token)
     else:
-        print("Token must be set in the env")
+        log.warning("Token must be set in the env")
+        # somehting to close this
     return None
 
 def main():
@@ -25,7 +30,7 @@ def main():
 
         loop.run_forever()
     except KeyboardInterrupt:
-        print("Oh you, I recieved CTRL+C, gonna shut down")
+        log.info("Oh you, I recieved CTRL+C, gonna shut down")
         if slvy is not None:
             if slvy.is_closed():
                 slvy.close()

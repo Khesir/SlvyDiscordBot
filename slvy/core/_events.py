@@ -20,13 +20,15 @@ INTRO = r"""
         \/            \/                                                   
 """
 
+log = logging.getLogger()
+
 
 def init_events(bot : discord.Client):
 
     @bot.event
     async def on_connect():
         if bot._uptime is None:
-            print("Connected to Discord. Getting ready...")
+            log.info("Connected to Discord. Getting ready...")
 
     @bot.event
     async def on_ready():
@@ -39,21 +41,21 @@ def init_events(bot : discord.Client):
                 bot.synced = True
                 await SlvyStatus(bot)
         except Exception as exc:
-            print("The bot failed to get ready!", exc_info=exc)
+            log.critical("The bot failed to get ready!", exc_info=exc)
 
 
     async def SlvyStatus(bot):
        
         activity = discord.Activity(
             type=discord.ActivityType.watching,
-            name=f"s! stream music and sht don't worry"
+            name=f"Just testing"
         )
         await bot.change_presence(
             status=discord.Status.online,
             activity=activity
         )
 
-        print("Slvy is Online")
+        log.info("Slvy is Online")
 
     async def _on_ready():
         if bot._uptime is not None:
@@ -111,24 +113,10 @@ def init_events(bot : discord.Client):
                 error.retry_after)
             await ctx.send(msg)
         elif not isinstance(error, Exception):
-            await ctx.send(error)
+            await log.warning(error)
         else:
-            await ctx.send(error)
+            await log.warning(error)
 
-    # @bot.event
-    # async def on_guild_join(guild : discord.Guild):
-    #     channel = guild.text_channels[0]
-    #     embed = discord.Embed(
-    #         title=guild.name, 
-    #         description=f"💖 **Thank you for inviting {bot.user.name}!!**\n\n__**A brief intro**__\nHey Everyone! My main purpose is creating an Inter Guild / Server Connectivity to bring the world closer together!\nHope you'll find my application useful! Thankyouuu~\n\nType `a!about` to know more about me and my usage!\n\n**__Servers Connected__**\n{len(bot.guilds)}\n\n")
-    #     await channel.send(embed=embed)
-    #     print(f'Bot has been added to a new server {guild.name}\n\n Added by {guild.owner.global_name } ({guild.owner.id})')
-    #     guildx = bot.get_guild(939025934483357766)
-    #     target_log = guildx.get_channel(1245210888290439300)
-    #     # target_channel = guild.system_channel  # Use the system channel for the guild
-    #     # if target_channel is not None:  # Ensure there's a system channel
-    #     #     await target_channel.send()
-    #     # else:
-    #     #     log.warning("System channel not found. Unable to send welcome message.")
-    #     await target_log.send(embed=discord.Embed(description=f'Bot has been added to a new server {guild.name}\n\n Added by {guild.owner.global_name } ({guild.owner.id})'))
-    #     await ariStatus(bot)
+    @bot.event
+    async def on_guild_join(guild : discord.Guild):
+        pass
